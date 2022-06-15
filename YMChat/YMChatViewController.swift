@@ -39,6 +39,8 @@ open class YMChatViewController: UIViewController {
             speechHelper = SpeechHelper()
             speechHelper?.delegate = self
         }
+        addChatView(config)
+        reloadChatView()
         modalPresentationStyle = .fullScreen
     }
     
@@ -46,11 +48,15 @@ open class YMChatViewController: UIViewController {
         fatalError("init(coder:) has not been implemented. Use init(config:) instead")
     }
 
+    public func reloadChatView() {
+        webView?.load(URLRequest(url: config.url))
+    }
+
     deinit {
         webView?.stopLoading()
     }
     
-    open override func viewDidLoad() {
+    fileprivate func addChatView(_ config: YMConfig) {
         addWebView()
         if config.showCloseButton {
             addCloseButton(tintColor: config.closeButtonColor)
@@ -58,8 +64,6 @@ open class YMChatViewController: UIViewController {
         if config.enableSpeech {
             addMicButton(tintColor: config.micButtonColor)
         }
-        log("Loading URL: \(config.url)")
-        webView?.load(URLRequest(url: config.url))
     }
 
     private func addWebView() {

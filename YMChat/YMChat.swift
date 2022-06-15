@@ -16,6 +16,8 @@ public class YMChat: NSObject, YMChatViewControllerDelegate {
     @objc public var viewController: YMChatViewController?
     @objc public var config: YMConfig!
 
+    private static var instanceMap: Dictionary<String,YMChat>!
+
     func validateConfig() throws {
         if config == nil {
             throw NSError(domain: "Config is nil. Set config before invoking startChatbot", code: 0, userInfo: nil)
@@ -35,6 +37,19 @@ public class YMChat: NSObject, YMChatViewControllerDelegate {
         try JSONSerialization.data(withJSONObject: config.payload, options: [])
     }
 
+    public static func getInstance(ymAuthToken: String) -> YMChat {
+        if(instanceMap == nil){
+            instanceMap = Dictionary<String,YMChat>()
+        }
+        if let ymChatInstance = instanceMap[ymAuthToken] {
+            return ymChatInstance
+        }else{
+            let instance = YMChat()
+            instanceMap[ymAuthToken] = instance
+            return instance
+        }
+    }
+    
     @discardableResult
     @objc public func initialiseView() throws -> YMChatViewController {
         try validateConfig()
