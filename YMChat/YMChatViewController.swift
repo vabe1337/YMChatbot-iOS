@@ -40,7 +40,6 @@ open class YMChatViewController: UIViewController {
             speechHelper?.delegate = self
         }
         addChatView(config)
-        reloadChatView()
         modalPresentationStyle = .fullScreen
     }
     

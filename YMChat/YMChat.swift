@@ -37,15 +37,15 @@ public class YMChat: NSObject, YMChatViewControllerDelegate {
         try JSONSerialization.data(withJSONObject: config.payload, options: [])
     }
 
-    public static func getInstance(ymAuthToken: String) -> YMChat {
+    public static func getInstance(token: String) -> YMChat {
         if(instanceMap == nil){
             instanceMap = Dictionary<String,YMChat>()
         }
-        if let ymChatInstance = instanceMap[ymAuthToken] {
+        if let ymChatInstance = instanceMap[token] {
             return ymChatInstance
         }else{
             let instance = YMChat()
-            instanceMap[ymAuthToken] = instance
+            instanceMap[token] = instance
             return instance
         }
     }
@@ -54,6 +54,7 @@ public class YMChat: NSObject, YMChatViewControllerDelegate {
     @objc public func initialiseView() throws -> YMChatViewController {
         try validateConfig()
         self.viewController = YMChatViewController(config: config)
+        self.viewController?.reloadChatView()
         self.viewController?.delegate = self
         return viewController!
     }
